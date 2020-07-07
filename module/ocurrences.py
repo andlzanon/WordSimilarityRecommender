@@ -42,9 +42,3 @@ def counter_occurences(filename_origin, counting_file):
 
     with open(counting_file, 'w', encoding="utf-8") as f:
         print(counted_nouns, file=f)
-
-#tests:
-if __name__ == '__main__':
-   
-    counter_occurences("corpora_BNC.txt", "BNC_counter.txt")
-    counter_occurences("corpora_reviews.txt", "counter_review.txt")

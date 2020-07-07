@@ -3,12 +3,12 @@ import collections
 from itertools import chain
 import os 
 
-def BNC_noun_parser (xml_name, 
-                     desired_tag,           
-                     searched_token,        
-                     first_attribute,       
-                     second_attribute,     
-                     file_destiny):         
+def noun_parser (xml_name, 
+                    desired_tag,           
+                    searched_token,        
+                    first_attribute,       
+                    second_attribute,     
+                    file_destiny):         
 
     """This function extracts all the present nouns in the current xml file.
         The nouns are stored in lower case.
@@ -35,7 +35,7 @@ def BNC_noun_parser (xml_name,
     Returns:
         None
     """                                                             
-                                                                                                                                   
+                                                                                                                                
     tree = ET.parse(xml_name)
     root = tree.getroot()
 
@@ -48,7 +48,7 @@ def BNC_noun_parser (xml_name,
     #list that is going to contain all the nouns extracted form the BNC file;
     #if the pos-tagging is a noun(pos="SUBST"), it is stored in the parsed_tokens list
     parsed_tokens = []
-       
+    
     
     for desired_tag in element:
         #current_attribute represents the grammatical class of the word traversed in the BNC xml tree
@@ -68,10 +68,8 @@ def BNC_noun_parser (xml_name,
     with open(file_destiny, 'a+', encoding="utf-8") as destiny:
         print(' '.join(parsed_tokens), file=destiny)
 
-    
 
-
-def BNC_nouns_extractor(root_directory, file_destiny):
+def nouns_extractor(root_directory, file_destiny):
 
     """Trasverse the folder "Texts" contained in the BNC database. The folder
     "Texts" contains the xml files of the database, which nouns are going
@@ -94,18 +92,6 @@ def BNC_nouns_extractor(root_directory, file_destiny):
     for subdir, dirs, files in os.walk(root_directory):
         for file in files:                      
             xml_file = os.path.join(subdir, file)
-            BNC_noun_parser(xml_file, "w", "pos", "SUBST", "hw", file_destiny)
+            noun_parser(xml_file, "w", "pos", "SUBST", "hw", file_destiny)
 
     return (file_destiny)
-
-
-#test:
-if __name__ == '__main__':
-
-    file_destiny = "corpora_BNC.txt"
-    #root_directory = "C:\\Users\\User\\Desktop\\ic\\ota_20.500.12024_2554\\2554\\Texts"
-    root_directory = "Your directory"
-
-    BNC_nouns_extractor(root_directory, file_destiny)
-
-

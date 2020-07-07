@@ -84,13 +84,3 @@ def single_review_noun_extractor(file_name, desired_POS, destination_file):
 
     with open(destination_file, 'a+', encoding="utf-8") as f:
         print(' '.join(desired_nouns), file=f)
-
-
-
-if __name__ == '__main__':
-
-    #dirtest = "C:\\Users\\User\\Desktop\\ic\\Reviews\\HetRec_CoreNLP" 
-    dirtest = "your diretory"
-    destiny_file = "corpora_reviews.txt"
-    
-    reviews_noun_extractor(dirtest, destiny_file)

@@ -1,7 +1,7 @@
-import counter_occurrences as count_occur
+import module.ocurrences as count_occur
 import numpy as np
 
-def KL_divergence(frequency_corpora_reviews, frequency_corpora_BNC):
+def divergence(frequency_corpora_reviews, frequency_corpora_BNC):
 
     """Computes the discrete KL divergence for a noun present in the corpora review.
         KL value = (frequency_corpora_reviews) * log(frequency_corpora_reviews/frequency_corpora_BNC)
@@ -29,13 +29,16 @@ def KL_divergence(frequency_corpora_reviews, frequency_corpora_BNC):
 
     return (KL)
 
-def KL_nouns_values(destiny_file):
+def nouns_values(root_directory, destiny_file):
 
     """Computes the KL value for each noun present in the corpora of reviews,
     using the previous generated files: "corpora_reviews.txt" and 
     "corpora_BNC.txt"
 
     Args:
+        root_directory (str): The directory on your computer for the folder
+        "Texts" that was obtain from count_occurrences
+
         destiny_file (str): The ".txt" file that is going to contain 
         the KL values for all the nouns presents in the reviews coropora
 
@@ -44,9 +47,9 @@ def KL_nouns_values(destiny_file):
         for all nouns presents in the corpora review
     """
     #counts the occurrence of each noun in the following corporas:
-    count_nouns_reviews = count_occur.count_in_file("corpora_reviews_apos_erro.txt")
-    count_nouns_BNC = count_occur.count_in_file("corpora_BNC_apos_erro.txt")
-    
+    count_nouns_reviews = count_occur.count_in_file(root_directory + "corpora_reviews.txt")
+    count_nouns_BNC = count_occur.count_in_file(root_directory + "corpora_BNC.txt")
+ 
     
     KL_values = {}
 
@@ -62,7 +65,7 @@ def KL_nouns_values(destiny_file):
         
         #KL_values is a dict containing the noun and it's kl_value, for all nouns
         #in the corpora review:
-        KL_values[noun] = KL_divergence(frequency_corpora_reviews, frequency_corpora_BNC)
+        KL_values[noun] = divergence(frequency_corpora_reviews, frequency_corpora_BNC)
 
     with open(destiny_file, 'w', encoding="utf-8") as f:
         print(KL_values, file=f)
@@ -97,9 +100,3 @@ def epsilon_aspects_extraction(KL_values, threshold, destiny_file):
         print(aspects, file=f)
 
     return aspects
-
-#tests:
-if __name__ == '__main__':
- 
-    dict_kl = KL_nouns_values("KL_nouns_apos_erro.txt")
-    aspects = epsilon_aspects_extraction(dict_kl, 2000, "aspects_apos_erro.txt")
