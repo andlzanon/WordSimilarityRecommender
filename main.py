@@ -72,12 +72,12 @@ def kl_divergence(nouns: list, bnc_path = "datasets/corpora_BNC.txt"):
     counted_nouns = collections.Counter(nouns)
     return kl_nouns_divergence(count_nouns_BNC, counted_nouns), counted_nouns
 
-def aspect_ranking(review: str, client):
+def aspect_extraction(review: str, client):
     nouns = extract_nouns(review)
     dict_kl, counted_nouns = kl_divergence(nouns)
     aspects = top_terms(dict_kl)
-    sentences = sentimtent_analysis(review, aspects, client)
-    return [aspect_score(a, aspects, counted_nouns, sentences[a]["sentences_sentiment"]) for a in aspects]
+    aspects = sentimtent_analysis(review, aspects, client)
+    return aspects, counted_nouns
 
 client = corenlp.CoreNLPClient(start_server=False, annotators=['sentiment'], timeout = 30000)
 
@@ -89,10 +89,7 @@ for movie in groups:
     reviews_aspects = {}
     for r in groups[movie]:
         try:
-            nouns = extract_nouns(mv["text"][r])
-            dict_kl, counted_nouns = kl_divergence(nouns)
-            aspects = top_terms(dict_kl)
-            aspects = sentimtent_analysis(mv["text"][r], aspects, client)
+            aspects, counted_nouns = aspect_extraction(mv["text"][r], client)
             for aspect in aspects:
                 if aspect not in reviews_aspects:
                     reviews_aspects[aspect] = {}
@@ -100,6 +97,7 @@ for movie in groups:
         except:
             print("Erro na revisao {0}, filme {1}".format(r, movie))
             continue
+        
     top_aspects = [[aspect, aspect_score(reviews_aspects[aspect])] for aspect in reviews_aspects]
     df = pd.DataFrame(data=top_aspects, columns=["aspect", "score"])
     df = df.sort_values(by=['score'], ascending=False)
