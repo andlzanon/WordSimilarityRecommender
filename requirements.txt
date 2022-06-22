@@ -5,7 +5,7 @@ corenlp-protobuf==3.8.0
 idna==2.9
 joblib==0.15.1
 nltk==3.5
-numpy==1.18.4
+numpy==1.22.0
 pandas==1.0.5
 protobuf==3.12.2
 python-dateutil==2.8.1
